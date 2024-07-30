@@ -10,7 +10,7 @@ export async function fetchImages(query) {
   }
 
   try {
-    const response = await axios.get('https://api.pixabay.com/api/', {
+    const response = await axios.get('https:/pixabay.com/api/', {
       params: {
         key: API_KEY,
         q: query,
