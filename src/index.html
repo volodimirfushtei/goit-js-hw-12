@@ -4,11 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+    <title>goit-js-hw-12</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>12</h1>
+    <form id="search-form" class="search-form">
+      <input
+        class="active"
+        type="text"
+        id="search-input"
+        placeholder=" Search images"
+      />
+      <button type="submit" class="submit">Search</button>
+    </form>
+    <div id="loader" class="loader" aria-live="polite" role="status"></div>
+    <div class="gallery" id="image-container"></div>
     <script type="module" src="./main.js"></script>
   </body>
 </html>

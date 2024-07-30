@@ -5,3 +5,192 @@
   |============================
 */
 @import url('./reset.css');
+
+:root {
+  --font-family: 'Montserrat', sans-serif;
+}
+body {
+  background-color: #1a1c1f;
+  font-family: var(--font-family);
+}
+form {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 48px;
+}
+input {
+  width: 272px;
+  height: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 8px;
+  background: #454343;
+  border-radius: 4px;
+  width: 272px;
+  height: 40px;
+  padding-left: 8px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #808080;
+  border-radius: 1rem;
+  border: 1px solid #808080;
+  background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+}
+.submit {
+  position: relative;
+  width: 6rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  background: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.submit::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  border-radius: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  z-index: -1;
+}
+
+.submit:hover {
+  background: #315cfd;
+  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  color: white;
+  font-size: 1.3rem;
+}
+input:hover,
+input:focus {
+  border: 1px solid #000;
+}
+
+input:active {
+  border: 1px solid #4e75ff;
+}
+
+button:hover {
+  background: #6c8cff;
+}
+/* --------------create loader------------------ */
+.loader {
+  display: none;
+  border: 8px solid #f3f3f3; /* Сірий фон */
+  border-top: 8px solid #de1212; /* Синій верх */
+  border-radius: 50%;
+  width: 40px; /* Ширина */
+  height: 40px; /* Висота */
+  animation: spin 1s linear infinite; /* Анімація обертання */
+  position: absolute; /* Фіксована позиція */
+  top: 20%; /* Центр по вертикалі */
+  left: 48%; /* Центр по горизонталі */
+  transform: translate(-50%, -50%); /* Центрування */
+  z-index: 999; /* Перекриття інших елементів */
+  /* Сховуємо завантажувач за замовчуванням */
+}
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  inset: 5px;
+  z-index: 998;
+  border-radius: 50%;
+  border: 5px solid #ed0505;
+  animation: prixClipFix 2s linear infinite;
+}
+
+.loader.visible {
+  display: inline-block; /* Відобразити при необхідності */
+}
+
+/* Анімація */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------- */
+
+.image {
+  height: 200px;
+  width: 100%;
+}
+/* Основний контейнер галереї */
+.gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 24px 24px;
+  margin-top: 48px;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-link {
+  display: block;
+}
+.card {
+  border: 1px solid #808080;
+  width: 360px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.card-points {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 360px;
+  height: 48px;
+}
+.card-link {
+  display: inline-block; /* Дозволяє блокувати елементи вставлятися на одному рівні розмітки */
+  text-decoration: none;
+}
+.card-text {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: #ded1d1;
+}
+.iziToast-custom .iziToast-icon {
+  display: none;
+}
+.iziToast-custom .iziToast-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.iziToast-custom .custom-icon {
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  right: 10px;
+}
