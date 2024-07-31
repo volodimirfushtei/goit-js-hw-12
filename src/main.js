@@ -48,6 +48,7 @@ async function handleSearch(event) {
       hideLoader();
       if (data.length > 0) {
         renderImages(data);
+
         loadButton.style.display = 'block'; // Show load button
       } else {
         NoImagesFound();
@@ -100,6 +101,8 @@ async function loadImages() {
     const data = await fetchImages(query, currentPage, perPage);
     if (data.length > 0) {
       renderImages(data);
+      setTimeout(scrollPage, 500);
+      scrollPage();
       currentPage++;
       loadButton.style.display = 'block'; // Show load button
     } else {
@@ -121,3 +124,29 @@ async function loadImages() {
 
 formElement.addEventListener('submit', handleSearch);
 loadButton.addEventListener('click', loadImages);
+
+function getCardHeight() {
+  const card = document.querySelector('.card');
+  if (card) {
+    const cardRect = card.getBoundingClientRect();
+    return cardRect.height;
+  }
+  return 0;
+}
+// Функція для плавного прокручування сторінки
+function scrollPage() {
+  const cardHeight = getCardHeight();
+  if (cardHeight > 0) {
+    // Прокрутка на дві висоти карточки
+    window.scrollBy({
+      top: 2 * cardHeight,
+      behavior: 'smooth', // Параметр 'smooth' забезпечує плавну анімацію прокрутки
+    });
+  }
+}
+const imagesLoaded = document.querySelectorAll('.image');
+imagesLoaded.forEach(img => {
+  img.onload = () => {
+    img.previousElementSibling.style.display = 'none'; // Приховати лоадер
+  };
+});

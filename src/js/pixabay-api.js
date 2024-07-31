@@ -42,7 +42,7 @@ function handleError(error) {
     console.error('Check your internet connection:');
     alert('Internet connection lost !');
   } else {
-    console.error('Error setting up the request:', error.message);
-    alert('Error setting up the request');
+    console.error('Error setting', error.message);
+    alert('Error setting');
   }
 }

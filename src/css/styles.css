@@ -91,16 +91,15 @@ button:hover {
 }
 /* --------------create loader------------------ */
 .loader {
-  display: none;
-  border: 8px solid #f3f3f3; /* Сірий фон */
-  border-top: 8px solid #de1212; /* Синій верх */
+  border: 7px solid #f3f3f3; /* Сірий фон */
+  border-top: 7px solid #de1212; /* Синій верх */
   border-radius: 50%;
-  width: 40px; /* Ширина */
-  height: 40px; /* Висота */
+  width: 25px; /* Ширина */
+  height: 25px; /* Висота */
   animation: spin 1s linear infinite; /* Анімація обертання */
   position: absolute; /* Фіксована позиція */
-  top: 20%; /* Центр по вертикалі */
-  left: 48%; /* Центр по горизонталі */
+  top: 30%; /* Центр по вертикалі */
+  left: 45%; /* Центр по горизонталі */
   transform: translate(-50%, -50%); /* Центрування */
   z-index: 999; /* Перекриття інших елементів */
   /* Сховуємо завантажувач за замовчуванням */
@@ -112,7 +111,7 @@ button:hover {
   inset: 5px;
   z-index: 998;
   border-radius: 50%;
-  border: 5px solid #ed0505;
+  border: 5px solid #ec0a0a;
   animation: prixClipFix 2s linear infinite;
 }
 
@@ -204,7 +203,7 @@ button:hover {
   border-radius: 5px;
   cursor: pointer;
 
-  margin-top: 60px;
+  margin-top: 24px;
   position: relative;
   width: 9rem;
   height: 2.5rem;
