@@ -33,4 +33,10 @@ export function renderImages(images) {
     const lightbox = new SimpleLightbox('[data-lightbox="gallery"]');
     lightbox.refresh();
   }
+  const imagesLoaded = document.querySelectorAll('.image');
+  imagesLoaded.forEach(img => {
+    img.onload = () => {
+      img.previousElementSibling.style.display = 'none'; // Приховати лоадер
+    };
+  });
 }

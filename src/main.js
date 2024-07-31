@@ -42,10 +42,10 @@ async function handleSearch(event) {
   if (query) {
     currentPage = 1; // Reset page for new query
     clearGallery();
-    showLoader();
+
     try {
       const data = await fetchImages(query, currentPage, perPage);
-      hideLoader();
+
       if (data.length > 0) {
         renderImages(data);
 
@@ -54,7 +54,6 @@ async function handleSearch(event) {
         NoImagesFound();
       }
     } catch (error) {
-      hideLoader();
       console.error('Error searching images:', error);
       showToastWithIconAtEnd(error.message, iconErr1, 3000);
       clearGallery();
@@ -79,24 +78,7 @@ function clearGallery() {
   imageContainer.innerHTML = '';
 }
 
-function showLoader() {
-  if (loader) {
-    loader.classList.add('visible');
-  } else {
-    console.error('Loader not found');
-  }
-}
-
-function hideLoader() {
-  if (loader) {
-    loader.classList.remove('visible');
-  } else {
-    console.error('Loader not found');
-  }
-}
-
 async function loadImages() {
-  showLoader();
   try {
     const data = await fetchImages(query, currentPage, perPage);
     if (data.length > 0) {
@@ -107,7 +89,7 @@ async function loadImages() {
       loadButton.style.display = 'block'; // Show load button
     } else {
       loadButton.style.display = 'none';
-      hideLoader();
+
       showToastWithIconAtEnd(
         "We're sorry, but you've reached the end of search results.",
         iconErr1,
@@ -119,7 +101,6 @@ async function loadImages() {
     console.error('Error fetching images:', error);
     loadButton.textContent = 'Failed to load more';
   }
-  hideLoader();
 }
 
 formElement.addEventListener('submit', handleSearch);
@@ -144,9 +125,3 @@ function scrollPage() {
     });
   }
 }
-const imagesLoaded = document.querySelectorAll('.image');
-imagesLoaded.forEach(img => {
-  img.onload = () => {
-    img.previousElementSibling.style.display = 'none'; // Приховати лоадер
-  };
-});
