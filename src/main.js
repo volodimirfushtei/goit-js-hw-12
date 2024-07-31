@@ -1,4 +1,3 @@
-'use strict';
 import iconErr2 from './img/bi_x-octagon.svg';
 import iconErr1 from './img/closebi_x-lg.svg';
 import iziToast from 'izitoast';
@@ -14,7 +13,7 @@ const imageContainer = document.getElementById('image-container');
 
 let query = '';
 let currentPage = 1;
-const perPage = 15; // Кількість зображень на сторінку
+const perPage = 15; // Number of images per page
 
 function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
   iziToast.show({
@@ -41,15 +40,15 @@ async function handleSearch(event) {
   query = document.querySelector('#search-input').value.trim();
 
   if (query) {
-    currentPage = 1; // Скидаємо сторінку при новому запиті
+    currentPage = 1; // Reset page for new query
     clearGallery();
     showLoader();
     try {
       const data = await fetchImages(query, currentPage, perPage);
       hideLoader();
-      if (data.hits && data.hits.length > 0) {
-        renderImages(data.hits);
-        loadButton.style.display = 'block'; // Показати кнопку завантаження
+      if (data.length > 0) {
+        renderImages(data);
+        loadButton.style.display = 'block'; // Show load button
       } else {
         NoImagesFound();
       }
@@ -99,12 +98,12 @@ async function loadImages() {
   showLoader();
   try {
     const data = await fetchImages(query, currentPage, perPage);
-    if (data.hits && data.hits.length > 0) {
-      renderImages(data.hits);
+    if (data.length > 0) {
+      renderImages(data);
       currentPage++;
-      loadButton.style.display = 'block'; // Показати кнопку завантаження
+      loadButton.style.display = 'block'; // Show load button
     } else {
-      loadButton.style.display = 'none'; // Приховати кнопку, якщо більше немає зображень
+      loadButton.style.display = 'none'; // Hide button if no more images
     }
   } catch (error) {
     console.error('Error fetching images:', error);

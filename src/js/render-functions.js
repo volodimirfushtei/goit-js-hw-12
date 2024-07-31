@@ -29,7 +29,5 @@ export function renderImages(images) {
     imageContainer.innerHTML = imageCards.join('');
     const lightbox = new SimpleLightbox('[data-lightbox="gallery"]');
     lightbox.refresh();
-  } else {
-    imageContainer.innerHTML = ''; // Повідомлення, якщо немає зображень
   }
 }
