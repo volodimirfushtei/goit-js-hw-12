@@ -39,8 +39,8 @@ function handleError(error) {
         alert(`Error: ${error.response.status}`);
     }
   } else if (error.request) {
-    console.error('No response received from the server');
-    alert('No response received from the server');
+    console.error('Check your internet connection:');
+    alert('Internet connection lost !');
   } else {
     console.error('Error setting up the request:', error.message);
     alert('Error setting up the request');

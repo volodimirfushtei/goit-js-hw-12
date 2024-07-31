@@ -103,7 +103,14 @@ async function loadImages() {
       currentPage++;
       loadButton.style.display = 'block'; // Show load button
     } else {
-      loadButton.style.display = 'none'; // Hide button if no more images
+      loadButton.style.display = 'none';
+      hideLoader();
+      showToastWithIconAtEnd(
+        "We're sorry, but you've reached the end of search results.",
+        iconErr1,
+        3000
+      );
+      // Hide button if no more images
     }
   } catch (error) {
     console.error('Error fetching images:', error);
