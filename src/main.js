@@ -9,8 +9,9 @@ import { renderImages } from './js/render-functions.js';
 const formElement = document.querySelector('#search-form');
 const loader = document.getElementById('loader');
 const loadButton = document.getElementById('loadButton');
+const searchButton = document.querySelector('.submit');
 const imageContainer = document.getElementById('image-container');
-
+const inputSearch = document.getElementById('search-input');
 let query = '';
 let currentPage = 1;
 const perPage = 15; // Number of images per page
@@ -40,25 +41,33 @@ async function handleSearch(event) {
   query = document.querySelector('#search-input').value.trim();
 
   if (query) {
-    currentPage = 1; // Reset page for new query
-    clearGallery();
+    if (currentPage === 1) {
+      // Reset gallery only if it's a new search
+      searchButton.removeEventListener('click', handleSearch);
+      loadButton.removeEventListener('click', loadImages);
+      clearGallery();
+    }
 
     try {
       const data = await fetchImages(query, currentPage, perPage);
 
       if (data.length > 0) {
         renderImages(data);
-
+        loadButton.addEventListener('click', loadImages);
         loadButton.style.display = 'block'; // Show load button
-      } else {
+      } else if (currentPage === 1) {
+        // Only show "No Images Found" on the first page
         NoImagesFound();
       }
     } catch (error) {
       console.error('Error searching images:', error);
       showToastWithIconAtEnd(error.message, iconErr1, 3000);
-      clearGallery();
+      if (currentPage === 1) {
+        clearGallery();
+      }
     }
-  } else {
+  } else if (currentPage === 1) {
+    // Show "No Images Found" only for empty query
     NoImagesFound();
   }
 
@@ -84,18 +93,17 @@ async function loadImages() {
     if (data.length > 0) {
       renderImages(data);
       setTimeout(scrollPage, 500);
-      scrollPage();
       currentPage++;
+      loadButton.addEventListener('click', loadImages);
       loadButton.style.display = 'block'; // Show load button
     } else {
+      loadButton.removeEventListener('click', loadImages);
       loadButton.style.display = 'none';
-
       showToastWithIconAtEnd(
         "We're sorry, but you've reached the end of search results.",
         iconErr1,
         3000
       );
-      // Hide button if no more images
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -104,7 +112,6 @@ async function loadImages() {
 }
 
 formElement.addEventListener('submit', handleSearch);
-loadButton.addEventListener('click', loadImages);
 
 function getCardHeight() {
   const card = document.querySelector('.card');
@@ -125,3 +132,10 @@ function scrollPage() {
     });
   }
 }
+inputSearch.addEventListener('blur', () => {
+  if (inputSearch.value.length === 0 || !inputSearch.value) {
+    inputSearch.style.border = '4px solid red';
+  } else {
+    inputSearch.style.border = '4px solid green';
+  }
+});
