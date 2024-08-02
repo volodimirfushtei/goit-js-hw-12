@@ -21,7 +21,7 @@ form {
   justify-content: center;
   margin-top: 48px;
 }
-input {
+.active {
   width: 272px;
   height: 40px;
   display: flex;
@@ -77,12 +77,11 @@ input {
   color: white;
   font-size: 1.3rem;
 }
-input:hover,
-input:focus {
+.active:hover {
   border: 1px solid #000;
 }
 
-input:active {
+.active:active {
   border: 1px solid #4e75ff;
 }
 
