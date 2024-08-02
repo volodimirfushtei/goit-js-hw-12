@@ -12,10 +12,10 @@ const loadButton = document.getElementById('loadButton');
 const searchButton = document.querySelector('.submit');
 const imageContainer = document.getElementById('image-container');
 const inputSearch = document.getElementById('search-input');
+
 let query = '';
 let currentPage = 1;
-const perPage = 15; // Number of images per page
-
+const perPage = 15;
 function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
   iziToast.show({
     position: 'topRight',
@@ -39,24 +39,36 @@ function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
 async function handleSearch(event) {
   event.preventDefault();
   query = document.querySelector('#search-input').value.trim();
+  currentPage = 1; // Скидаємо номер сторінки при новому пошуку
 
   if (query) {
     if (currentPage === 1) {
-      // Reset gallery only if it's a new search
+      // Новий пошук
       searchButton.removeEventListener('click', handleSearch);
       loadButton.removeEventListener('click', loadImages);
       clearGallery();
     }
 
     try {
-      const data = await fetchImages(query, currentPage, perPage);
+      const { hits, totalHits } = await fetchImages(
+        query,
+        currentPage,
+        perPage
+      );
 
-      if (data.length > 0) {
-        renderImages(data);
+      if (hits.length > 0) {
+        renderImages(hits);
+        loadButton.style.display = 'block';
         loadButton.addEventListener('click', loadImages);
-        loadButton.style.display = 'block'; // Show load button
+        if (hits.length >= totalHits) {
+          loadButton.style.display = 'none';
+          showToastWithIconAtEnd(
+            "We're sorry, but you've reached the end of search results.",
+            iconErr1,
+            3000
+          );
+        }
       } else if (currentPage === 1) {
-        // Only show "No Images Found" on the first page
         NoImagesFound();
       }
     } catch (error) {
@@ -67,7 +79,6 @@ async function handleSearch(event) {
       }
     }
   } else if (currentPage === 1) {
-    // Show "No Images Found" only for empty query
     NoImagesFound();
   }
 
@@ -89,15 +100,24 @@ function clearGallery() {
 
 async function loadImages() {
   try {
-    const data = await fetchImages(query, currentPage, perPage);
-    if (data.length > 0) {
-      renderImages(data);
+    const { hits, totalHits } = await fetchImages(query, currentPage, perPage);
+
+    if (hits.length > 0) {
+      renderImages(hits);
       setTimeout(scrollPage, 500);
       currentPage++;
       loadButton.addEventListener('click', loadImages);
-      loadButton.style.display = 'block'; // Show load button
+      loadButton.style.display = 'block';
+      if (currentPage * perPage >= totalHits) {
+        loadButton.style.display = 'none';
+        loadButton.removeEventListener('click', loadImages);
+        showToastWithIconAtEnd(
+          "We're sorry, but you've reached the end of search results.",
+          iconErr1,
+          3000
+        );
+      }
     } else {
-      loadButton.removeEventListener('click', loadImages);
       loadButton.style.display = 'none';
       showToastWithIconAtEnd(
         "We're sorry, but you've reached the end of search results.",
@@ -121,14 +141,13 @@ function getCardHeight() {
   }
   return 0;
 }
-// Функція для плавного прокручування сторінки
 function scrollPage() {
   const cardHeight = getCardHeight();
   if (cardHeight > 0) {
-    // Прокрутка на дві висоти карточки
+    // Прокрутка на дві висоти
     window.scrollBy({
       top: 2 * cardHeight,
-      behavior: 'smooth', // Параметр 'smooth' забезпечує плавну анімацію прокрутки
+      behavior: 'smooth',
     });
   }
 }

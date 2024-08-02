@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export async function fetchImages(query, currentPage = 1, perPage = 15) {
   const API_KEY = '45065033-34b48c3d2ea0e7ba665d8e642';
   const url = 'https://pixabay.com/api/';
@@ -16,13 +15,13 @@ export async function fetchImages(query, currentPage = 1, perPage = 15) {
 
   try {
     const response = await axios.get(url, { params });
-    return response.data.hits;
+    const { hits, totalHits } = response.data; // Отримання totalHits
+    return { hits, totalHits }; // Повертаємо зображення, і загальну кількість
   } catch (error) {
     handleError(error);
-    return [];
+    return { hits: [], totalHits: 0 }; // Повертаємо пустий масив з нульовим totalHits
   }
 }
-
 function handleError(error) {
   if (error.response) {
     switch (error.response.status) {

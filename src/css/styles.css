@@ -111,7 +111,8 @@ button:hover {
   z-index: 998;
   border-radius: 50%;
   border: 5px solid #ec0a0a;
-  animation: prixClipFix 2s linear infinite;
+  animation: spin 2s linear infinite;
+  will-change: transform;
 }
 
 .loader.visible {
@@ -193,15 +194,11 @@ button:hover {
   right: 10px;
 }
 .load-btn {
-  display: block;
   margin: 20px auto;
   padding: 10px 20px;
-
   color: rgb(34, 30, 30);
-
   border-radius: 5px;
   cursor: pointer;
-
   margin-top: 24px;
   position: relative;
   width: 9rem;
