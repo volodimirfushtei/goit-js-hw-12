@@ -40,7 +40,8 @@ function handleError(error) {
         console.error(`Error: ${error.response.status}`);
     }
   } else if (error.request) {
-    console.error('Check your internet connection:');
+    console.error('Check your internet connection:Error');
+    alert('Check your internet connection');
   } else {
     console.error('Error setting up request:', error.message);
   }
