@@ -40,3 +40,23 @@ export function renderImages(images) {
     };
   });
 }
+const AppState = (() => {
+  let currentPage = 1;
+  let query = '';
+
+  return {
+    getCurrentPage: () => currentPage,
+    setCurrentPage: page => {
+      if (Number.isInteger(page) && page > 0) currentPage = page;
+    },
+    getQuery: () => query,
+    setQuery: newQuery => {
+      if (typeof newQuery === 'string') query = newQuery;
+    },
+    incrementPage: () => (currentPage += 1),
+    resetPage: () => {
+      currentPage = 1;
+    },
+  };
+})();
+export default AppState;

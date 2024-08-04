@@ -5,6 +5,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 import { fetchImages } from './js/pixabay-api.js';
 import { renderImages } from './js/render-functions.js';
+import AppState from './js/render-functions.js';
 
 const formElement = document.querySelector('#search-form');
 const loader = document.getElementById('loader');
@@ -13,8 +14,6 @@ const searchButton = document.querySelector('.submit');
 const imageContainer = document.getElementById('image-container');
 const inputSearch = document.getElementById('search-input');
 
-let query = '';
-let currentPage = 1;
 const perPage = 15;
 
 function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
@@ -39,21 +38,22 @@ function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
 
 async function handleSearch(event) {
   event.preventDefault();
-  query = document.querySelector('#search-input').value.trim();
-
+  const query = document.querySelector('#search-input').value.trim();
+  AppState.setQuery(query);
+  AppState.resetPage();
   if (query) {
-    currentPage = 1;
+    searchButton.removeEventListener('click', handleSearch);
     loadButton.removeEventListener('click', loadImages);
     clearGallery();
 
     try {
       const { hits, totalHits } = await fetchImages(
-        query,
-        currentPage,
+        AppState.getQuery(),
+        AppState.getCurrentPage(),
         perPage
       );
 
-      if (hits && hits.length > 0) {
+      if (hits.length > 0) {
         renderImages(hits);
         loadButton.style.display = 'block';
         loadButton.addEventListener('click', loadImages);
@@ -95,11 +95,15 @@ function clearGallery() {
 }
 
 async function loadImages() {
-  currentPage++;
+  AppState.incrementPage();
   console.log('Loading images...');
-  console.log('Current page:', currentPage);
+  console.log('Current page:', AppState.getCurrentPage());
   try {
-    const { hits, totalHits } = await fetchImages(query, currentPage, perPage);
+    const { hits, totalHits } = await fetchImages(
+      AppState.getQuery(),
+      AppState.getCurrentPage(),
+      perPage
+    );
 
     console.log('Fetched hits:', hits);
     console.log('Total hits:', totalHits);
@@ -108,7 +112,7 @@ async function loadImages() {
       renderImages(hits);
       setTimeout(scrollPage, 500);
 
-      if (currentPage * perPage >= totalHits) {
+      if (AppState.getCurrentPage() * perPage >= totalHits) {
         loadButton.style.display = 'none';
         showToastWithIconAtEnd(
           "We're sorry, but you've reached the end of search results.",
