@@ -66,7 +66,7 @@ async function handleSearch(event) {
           );
         }
       } else {
-        showNoImagesFound();
+        NoImagesFound();
       }
     } catch (error) {
       console.error('Error searching images:', error);
@@ -74,13 +74,13 @@ async function handleSearch(event) {
       clearGallery();
     }
   } else {
-    showNoImagesFound();
+    NoImagesFound();
   }
 
   formElement.reset();
 }
 
-function showNoImagesFound() {
+function NoImagesFound() {
   showToastWithIconAtEnd(
     'Sorry, there are no images matching your search query. Please try again!',
     iconErr1,
