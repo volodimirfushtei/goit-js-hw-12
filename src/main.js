@@ -1,5 +1,5 @@
-import iconErr2 from './img/bi_x-octagon.svg';
-import iconErr1 from './img/closebi_x-lg.svg';
+import iconErr2 from './img/bi_x.svg';
+import iconErr1 from './img/close.svg';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
