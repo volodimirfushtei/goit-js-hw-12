@@ -16,18 +16,19 @@ const inputSearch = document.getElementById('search-input');
 let query = '';
 let currentPage = 1;
 const perPage = 15;
+
 function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
   iziToast.show({
     position: 'topRight',
-    message: message,
+    message,
     backgroundColor: '#EF4040',
     messageColor: '#fff',
     messageSize: '16',
     maxWidth: 432,
     iconUrl: iconErr2,
-    timeout: timeout,
+    timeout,
     class: 'iziToast-custom',
-    onOpening: function (instance, toast) {
+    onOpening: (instance, toast) => {
       const iconElement = document.createElement('div');
       iconElement.className = 'custom-icon';
       iconElement.style.backgroundImage = `url(${iconUrl})`;
@@ -39,15 +40,11 @@ function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
 async function handleSearch(event) {
   event.preventDefault();
   query = document.querySelector('#search-input').value.trim();
-  currentPage = 1; // Скидаємо номер сторінки при новому пошуку
 
   if (query) {
-    if (currentPage === 1) {
-      // Новий пошук
-      searchButton.removeEventListener('click', handleSearch);
-      loadButton.removeEventListener('click', loadImages);
-      clearGallery();
-    }
+    currentPage = 1;
+    loadButton.removeEventListener('click', loadImages);
+    clearGallery();
 
     try {
       const { hits, totalHits } = await fetchImages(
@@ -56,7 +53,7 @@ async function handleSearch(event) {
         perPage
       );
 
-      if (hits.length > 0) {
+      if (hits && hits.length > 0) {
         renderImages(hits);
         loadButton.style.display = 'block';
         loadButton.addEventListener('click', loadImages);
@@ -68,30 +65,29 @@ async function handleSearch(event) {
             3000
           );
         }
-      } else if (currentPage === 1) {
-        NoImagesFound();
+      } else {
+        showNoImagesFound();
       }
     } catch (error) {
       console.error('Error searching images:', error);
       showToastWithIconAtEnd(error.message, iconErr1, 3000);
-      if (currentPage === 1) {
-        clearGallery();
-      }
+      clearGallery();
     }
-  } else if (currentPage === 1) {
-    NoImagesFound();
+  } else {
+    showNoImagesFound();
   }
 
   formElement.reset();
 }
 
-function NoImagesFound() {
+function showNoImagesFound() {
   showToastWithIconAtEnd(
     'Sorry, there are no images matching your search query. Please try again!',
     iconErr1,
     3000
   );
   clearGallery();
+  loadButton.style.display = 'none';
 }
 
 function clearGallery() {
@@ -99,23 +95,29 @@ function clearGallery() {
 }
 
 async function loadImages() {
+  currentPage++;
+  console.log('Loading images...');
+  console.log('Current page:', currentPage);
   try {
     const { hits, totalHits } = await fetchImages(query, currentPage, perPage);
+
+    console.log('Fetched hits:', hits);
+    console.log('Total hits:', totalHits);
 
     if (hits.length > 0) {
       renderImages(hits);
       setTimeout(scrollPage, 500);
-      currentPage++;
-      loadButton.addEventListener('click', loadImages);
-      loadButton.style.display = 'block';
+
       if (currentPage * perPage >= totalHits) {
         loadButton.style.display = 'none';
-        loadButton.removeEventListener('click', loadImages);
         showToastWithIconAtEnd(
           "We're sorry, but you've reached the end of search results.",
           iconErr1,
           3000
         );
+        loadButton.removeEventListener('click', loadImages);
+      } else {
+        loadButton.style.display = 'block';
       }
     } else {
       loadButton.style.display = 'none';
@@ -127,7 +129,7 @@ async function loadImages() {
     }
   } catch (error) {
     console.error('Error fetching images:', error);
-    loadButton.textContent = 'Failed to load more';
+    loadButton.removeEventListener('click', loadImages);
   }
 }
 
@@ -141,20 +143,19 @@ function getCardHeight() {
   }
   return 0;
 }
+
 function scrollPage() {
   const cardHeight = getCardHeight();
   if (cardHeight > 0) {
-    // Прокрутка на дві висоти
     window.scrollBy({
       top: 2 * cardHeight,
       behavior: 'smooth',
     });
   }
 }
+
 inputSearch.addEventListener('blur', () => {
-  if (inputSearch.value.length === 0 || !inputSearch.value) {
-    inputSearch.style.border = '4px solid red';
-  } else {
-    inputSearch.style.border = '4px solid green';
-  }
+  inputSearch.style.border = inputSearch.value
+    ? '4px solid green'
+    : '4px solid red';
 });
