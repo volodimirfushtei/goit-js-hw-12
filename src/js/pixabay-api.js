@@ -28,7 +28,6 @@ export async function fetchImages(query, currentPage = 1, perPage = 15) {
 
 function handleError(error) {
   if (error.response) {
-    // Сервер повернув код статусу
     switch (error.response.status) {
       case 404:
         console.error('Images not found');
