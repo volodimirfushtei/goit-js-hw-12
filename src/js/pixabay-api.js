@@ -6,7 +6,7 @@ export async function fetchImages(query, currentPage = 1, perPage = 15) {
 
   const params = {
     key: API_KEY,
-    q: query,
+    q: encodeURIComponent(query),
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
