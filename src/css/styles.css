@@ -231,3 +231,22 @@ button:hover {
   color: white;
   font-size: 1.1rem;
 }
+.info {
+  display: flex;
+  flex-direction: row;
+  width: 280px;
+  height: 40px;
+  gap: 8px;
+  position: sticky;
+  top: 8px;
+  padding: 0;
+}
+.current-page,
+.total-hits {
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-size: small;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  color: #f54747;
+}

@@ -14,6 +14,10 @@ const searchButton = document.querySelector('.submit');
 const imageContainer = document.getElementById('image-container');
 const inputSearch = document.getElementById('search-input');
 
+// Нові елементи для відображення загальної кількості переглядів та поточної сторінки
+const totalHitsElement = document.getElementById('total-hits');
+const currentPageElement = document.getElementById('current-page');
+
 const perPage = 15;
 
 function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
@@ -34,6 +38,11 @@ function showToastWithIconAtEnd(message, iconUrl, timeout = 3000) {
       toast.querySelector('.iziToast-message').appendChild(iconElement);
     },
   });
+}
+
+function updateInfo(totalHits, currentPage) {
+  totalHitsElement.innerText = `Total Hits: ${totalHits}`;
+  currentPageElement.innerText = `Current Page: ${currentPage}`;
 }
 
 async function handleSearch(event) {
@@ -57,6 +66,8 @@ async function handleSearch(event) {
         renderImages(hits);
         loadButton.style.display = 'block';
         loadButton.addEventListener('click', loadImages);
+        updateInfo(totalHits, AppState.getCurrentPage()); // Оновлення інформації
+
         if (hits.length >= totalHits) {
           loadButton.style.display = 'none';
           showToastWithIconAtEnd(
@@ -111,6 +122,8 @@ async function loadImages() {
     if (hits.length > 0) {
       renderImages(hits);
       setTimeout(scrollPage, 500);
+
+      updateInfo(totalHits, AppState.getCurrentPage()); // Оновлення інформації
 
       if (AppState.getCurrentPage() * perPage >= totalHits) {
         loadButton.style.display = 'none';
